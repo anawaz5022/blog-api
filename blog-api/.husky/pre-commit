@@ -1,0 +1,2 @@
+cd blog-api
+npx lint-staged
