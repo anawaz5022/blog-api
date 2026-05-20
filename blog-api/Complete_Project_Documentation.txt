@@ -3,8 +3,8 @@
   NEXT.JS BLOG API
   A Production-Ready RESTful Backend System
 
-  Author       : [Your Name]
-  Version      : 1.0.0
+  Author       : Ahmad Nawaz
+  Version      : 2.1.0
   Type         : Backend / API Project
   Difficulty   : Intermediate
   Status       : In Development
