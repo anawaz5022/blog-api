@@ -6,7 +6,6 @@
   Author       : Ahmad Nawaz
   Version      : 2.1.0
   Type         : Backend / API Project
-  Difficulty   : Intermediate
   Status       : In Development
 
 ================================================================================
