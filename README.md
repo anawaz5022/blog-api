@@ -1,0 +1,1135 @@
+================================================================================
+
+  NEXT.JS BLOG API
+  A Production-Ready RESTful Backend System
+
+  Author       : Ahmad Nawaz
+  Version      : 2.1.0
+  Type         : Backend / API Project
+  Status       : In Development
+
+================================================================================
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  TABLE OF CONTENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1.  What Is This Project?
+  2.  Why This Project Was Built
+  3.  Who This Project Is For
+  4.  Core Features
+  5.  Technology Stack
+  6.  System Architecture
+  7.  Database Design
+  8.  API Overview
+  9.  Authentication & Authorization System
+  10. Security Design
+  11. Project Structure
+  12. Key Engineering Decisions
+  13. What This Project Teaches
+  14. How to Run the Project
+  15. Future Improvements
+  16. Glossary
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 1 — WHAT IS THIS PROJECT?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The Next.js Blog API is a fully functional, production-ready backend system
+that powers a blogging platform. It is built entirely as a RESTful API,
+meaning it speaks JSON — it has no visual interface of its own, but any
+frontend application (a website, a mobile app, or a desktop app) can connect
+to it and use its features.
+
+Think of it as the engine behind a blogging platform like Medium or Dev.to.
+It handles everything that happens behind the scenes: registering users,
+securely logging them in, letting authors write and publish posts, allowing
+readers to leave comments, organising content with tags, and ensuring that
+only the right people can access or change the right content.
+
+The system is designed to the same standards you would expect from a
+professional, real-world backend product — with proper security controls,
+structured error handling, rate limiting, input validation, and a clean,
+logical codebase that other developers can read and work with.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 2 — WHY THIS PROJECT WAS BUILT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Most beginner backend tutorials teach isolated concepts — how to connect to a
+database, how to create a route, how to check a password. What they rarely
+show is how all of these pieces work together in a single, coherent system
+that is safe, maintainable, and ready for real use.
+
+This project was built to bridge that gap.
+
+The goal was to build something that touches every major concept a backend
+developer needs to understand — authentication, authorization, data
+validation, database design, error handling, security hardening, logging,
+rate limiting, and API design — all in one place, all working together,
+and all built with the same tools and patterns used in the professional
+software industry today.
+
+A blog platform was chosen as the domain because it is familiar enough that
+anyone can understand what it does, yet complex enough to require all of the
+above concepts to be implemented properly. It has users, content, social
+interactions (comments), access control (who can edit what), and public vs
+private content — making it an ideal vehicle for learning real-world backend
+development.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 3 — WHO THIS PROJECT IS FOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This project is relevant to several different audiences:
+
+
+  FOR DEVELOPERS
+  ─────────────
+  This is a hands-on, intermediate-level project for developers who already
+  know the basics of JavaScript or TypeScript and want to deepen their
+  understanding of backend systems. It is ideal for:
+
+  - Self-taught developers building their first serious backend project
+  - Frontend developers learning full-stack development
+  - Computer science students applying academic knowledge to real tools
+  - Junior developers preparing for backend engineering roles
+
+  The project is deliberately designed at "intermediate" difficulty, meaning
+  it goes well beyond simple tutorials but does not require expert-level
+  knowledge to understand or build.
+
+
+  FOR RECRUITERS & HIRING MANAGERS
+  ──────────────────────────────────
+  This project demonstrates practical, job-ready backend engineering skills
+  including API design, database modelling, authentication implementation,
+  security best practices, TypeScript, and use of industry-standard tools.
+  It reflects the kind of work a junior-to-mid level backend or full-stack
+  engineer would be expected to produce in a professional environment.
+
+
+  FOR COLLABORATORS & REVIEWERS
+  ──────────────────────────────
+  The codebase follows a clear module-based structure with a consistent
+  layered architecture (route handler → service → database), making it
+  straightforward to navigate, review, extend, or contribute to.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 4 — CORE FEATURES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The system is organised into five functional areas:
+
+
+  ① USER MANAGEMENT
+  ─────────────────
+  Users can create accounts with an email address, a unique username, and a
+  password. Passwords are never stored in plain text — they are processed
+  through a strong cryptographic hashing algorithm before being saved. Each
+  user is assigned one of three roles that determine what they are allowed to
+  do within the system:
+
+    • ADMIN   — Full access. Can manage all content, all users, and all tags.
+    • AUTHOR  — Can create, edit, and delete their own posts and comments.
+    • READER  — Can read published content and leave comments.
+
+  Users have public profiles that display their name, username, and published
+  posts. They can update their profile information and change their password
+  through dedicated endpoints.
+
+
+  ② POSTS
+  ────────
+  Authors can create blog posts with a title, body content, an optional short
+  excerpt, and one or more tags. Every post gets a URL-friendly slug generated
+  automatically from its title (for example, a post titled "Getting Started
+  with Next.js" becomes "/posts/getting-started-with-next-js").
+
+  Posts have three states:
+    • DRAFT     — Only visible to the author who wrote it. Not publicly listed.
+    • PUBLISHED — Visible to everyone. Appears in public listings and search.
+    • ARCHIVED  — Hidden from public listings but accessible by the author.
+
+  The posts API supports:
+    - Creating, reading, updating, and deleting posts
+    - Filtering by author, tag, or publication status
+    - Searching posts by title or excerpt
+    - Paginated results (controlled page size, up to 100 per page)
+    - Automatic slug generation with collision handling
+
+
+  ③ COMMENTS
+  ───────────
+  Authenticated users can leave comments on any published post. Comment
+  authors can edit or delete their own comments. Admins can delete any
+  comment. Comments are nested under their parent post in the API response,
+  and each post's comment count is included in post listings for efficiency.
+
+
+  ④ TAGS
+  ───────
+  Posts can be tagged with one or more descriptive labels (for example:
+  "javascript", "tutorial", "career"). Tags have both a display name and a
+  slug used in URLs and filters. Only administrators can create or delete
+  tags. Anyone can browse the full list of tags and filter posts by tag.
+
+
+  ⑤ DISCOVERY & SEARCH
+  ─────────────────────
+  The public posts listing endpoint supports several query parameters that
+  allow clients to find exactly the content they need:
+
+    - Pagination    : ?page=2&limit=20
+    - Tag filter    : ?tagSlug=javascript
+    - Author filter : ?authorId=abc123
+    - Text search   : ?search=getting+started
+    - Status filter : ?status=PUBLISHED
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 5 — TECHNOLOGY STACK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Every technology was chosen for a specific reason. This section explains not
+just what is used, but why.
+
+
+  FRAMEWORK: Next.js 15 (App Router)
+  ────────────────────────────────────
+  Next.js is widely known as a React framework for building websites, but it
+  also provides a powerful system for building backend APIs called Route
+  Handlers. These run server-side and are never exposed to the browser,
+  making them a secure place to handle sensitive operations like database
+  queries and authentication.
+
+  The App Router (introduced in Next.js 13 and matured in 15) was chosen
+  over the older Pages Router because it follows modern web standards, runs
+  closer to the network edge for better performance, and has a cleaner
+  structure for organising API routes.
+
+
+  LANGUAGE: TypeScript
+  ─────────────────────
+  TypeScript is JavaScript with a type system added on top. It catches entire
+  categories of bugs at compile time that would otherwise only appear at
+  runtime — wrong property names, missing null checks, passing a string where
+  a number is expected. In a backend system where data flows from the network
+  through validation into a database and back, TypeScript's type safety is
+  not just convenient — it is a meaningful security and reliability tool.
+
+  The project uses TypeScript in strict mode, which applies the most thorough
+  set of type checks available.
+
+
+  DATABASE: PostgreSQL
+  ─────────────────────
+  PostgreSQL is one of the most trusted and capable relational databases in
+  existence. It was chosen because the data in a blog platform — users, posts,
+  comments, tags — is naturally relational. A post belongs to an author, a
+  comment belongs to both a post and an author, tags connect to many posts.
+  Relational databases model these relationships accurately and efficiently,
+  and PostgreSQL does it better than almost any other option.
+
+  The database is hosted on Neon or Supabase — cloud platforms that offer
+  PostgreSQL with serverless-compatible connection pooling, which is important
+  when running on Next.js's serverless infrastructure.
+
+
+  ORM: Prisma
+  ────────────
+  Prisma is a database toolkit that sits between the application code and
+  PostgreSQL. Rather than writing raw SQL queries, developers define a schema
+  in a readable format and Prisma generates a fully type-safe query builder
+  from it. This means database queries are checked by TypeScript — if a field
+  does not exist on a table, the code will not compile. It also means SQL
+  injection attacks are structurally prevented, because user input is never
+  interpolated into query strings.
+
+
+  AUTHENTICATION: Auth.js v5 (NextAuth)
+  ───────────────────────────────────────
+  Auth.js (formerly NextAuth) is a mature, well-audited authentication
+  library built specifically for Next.js. It handles the complex and
+  security-sensitive parts of authentication: session management, CSRF
+  protection, cookie configuration, and token rotation. It supports the
+  Credentials provider for email/password login and can be extended with
+  OAuth providers (Google, GitHub, etc.) later.
+
+  Using a battle-tested library like Auth.js is the industry best practice.
+  Rolling custom authentication from scratch introduces unnecessary risk.
+
+
+  PASSWORD HASHING: bcryptjs
+  ──────────────────────────
+  bcrypt is the industry standard algorithm for storing passwords. It is
+  designed to be slow — each hash takes roughly 300 milliseconds at the
+  cost factor used in this project. This slowness is intentional: it makes
+  brute-force attacks computationally expensive. A cost factor of 12 was
+  chosen, which provides strong security while remaining acceptable for
+  the user experience.
+
+
+  VALIDATION: Zod
+  ────────────────
+  Zod is a TypeScript-first schema validation library. Every piece of data
+  that enters the system from the outside world — a registration form, a
+  post body, a URL parameter — is parsed through a Zod schema before
+  anything else happens. If the data does not match the expected shape,
+  the request is rejected with a descriptive error before it can reach
+  the database. This prevents a wide range of injection and data integrity
+  issues.
+
+
+  RATE LIMITING: Upstash Redis + @upstash/ratelimit
+  ───────────────────────────────────────────────────
+  Rate limiting controls how many requests a user or IP address can make
+  in a given time window. Without it, a single attacker could hammer the
+  login endpoint millions of times trying to guess passwords (a brute-force
+  attack), or flood the API with posts to exhaust server resources (a
+  denial-of-service attack).
+
+  Upstash provides a serverless Redis instance. The @upstash/ratelimit
+  library implements a sliding-window algorithm that works correctly even
+  when the API runs across multiple serverless instances simultaneously —
+  something that simpler in-memory rate limiters cannot do.
+
+
+  LOGGING: Pino
+  ──────────────
+  Pino is a high-performance, structured logging library. Unlike console.log,
+  Pino outputs machine-readable JSON that can be ingested by log management
+  platforms (like Datadog or Logtail) for searching, alerting, and analysis.
+  It also supports automatic redaction of sensitive fields — passwords and
+  tokens are never written to logs, even accidentally.
+
+
+  TESTING: Vitest
+  ────────────────
+  Vitest is a modern testing framework that integrates naturally with
+  TypeScript and the project's toolchain. Unit tests verify that individual
+  functions — particularly validation schemas and service layer functions —
+  behave correctly for both valid and invalid inputs.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 6 — SYSTEM ARCHITECTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The system follows a layered architecture. Every incoming HTTP request passes
+through a fixed sequence of layers before a response is returned. Each layer
+has a single responsibility, and layers only communicate with the layers
+directly adjacent to them.
+
+  ┌──────────────────────────────────────────────────────────────┐
+  │                         CLIENT                               │
+  │              (browser, mobile app, Postman, etc.)            │
+  └──────────────────────────┬───────────────────────────────────┘
+                             │  HTTP Request
+                             ▼
+  ┌──────────────────────────────────────────────────────────────┐
+  │                   NEXT.JS MIDDLEWARE                         │
+  │     Runs before every API request. Checks for a valid        │
+  │     session on protected routes. Rejects unauthenticated     │
+  │     requests immediately, before they reach route handlers.  │
+  └──────────────────────────┬───────────────────────────────────┘
+                             │
+                             ▼
+  ┌──────────────────────────────────────────────────────────────┐
+  │                    ROUTE HANDLER                             │
+  │     The entry point for a specific API endpoint. Its job     │
+  │     is narrow: apply rate limiting, parse and validate the   │
+  │     request body with Zod, call the appropriate service      │
+  │     function, and return a formatted response.               │
+  └──────────────────────────┬───────────────────────────────────┘
+                             │
+                             ▼
+  ┌──────────────────────────────────────────────────────────────┐
+  │                    SERVICE LAYER                             │
+  │     Contains all business logic and database queries.        │
+  │     Enforces ownership rules, handles slug generation,       │
+  │     applies visibility rules, and interacts with Prisma.     │
+  │     Has no knowledge of HTTP — it receives plain data and    │
+  │     returns plain data.                                      │
+  └──────────────────────────┬───────────────────────────────────┘
+                             │
+                             ▼
+  ┌──────────────────────────────────────────────────────────────┐
+  │                      PRISMA ORM                             │
+  │     Translates service layer calls into parameterised SQL    │
+  │     queries. Handles connection pooling, type safety, and    │
+  │     protection against SQL injection at the library level.   │
+  └──────────────────────────┬───────────────────────────────────┘
+                             │
+                             ▼
+  ┌──────────────────────────────────────────────────────────────┐
+  │                     POSTGRESQL DATABASE                      │
+  │     Stores all persistent data: users, posts, comments,      │
+  │     tags, and sessions. Indexed for performance on the       │
+  │     most common query patterns.                              │
+  └──────────────────────────────────────────────────────────────┘
+
+
+  WHY THIS ARCHITECTURE?
+  ──────────────────────
+  Separating the application into layers makes each part independently
+  testable. A service function can be tested without running an HTTP server.
+  A route handler can be tested without a real database. When something goes
+  wrong, the architecture makes it much easier to identify exactly which
+  layer the problem is in.
+
+  It also makes the codebase easier to extend. Adding a new endpoint means
+  writing a new route handler and possibly a new service function — not
+  modifying a large, tangled file.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 7 — DATABASE DESIGN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The database contains six core tables. The relationships between them reflect
+the real-world relationships between the entities they represent.
+
+
+  USERS
+  ──────
+  Stores all registered accounts. Each user has a unique email address and
+  a unique username. The password is stored only as a bcrypt hash — the
+  original password is never saved anywhere. The role field determines what
+  the user is allowed to do (ADMIN, AUTHOR, or READER).
+
+  Key fields: id, email, username, passwordHash, name, bio, role, createdAt
+
+
+  POSTS
+  ──────
+  Stores blog posts written by authors. Each post belongs to exactly one
+  author (the user who created it). A post has a status — DRAFT, PUBLISHED,
+  or ARCHIVED — which controls its visibility. The slug is a unique,
+  URL-safe version of the title used in links. The publishedAt timestamp
+  records when a post was made public.
+
+  Key fields: id, title, slug, content, excerpt, status, publishedAt, authorId
+
+
+  COMMENTS
+  ─────────
+  Stores comments left on posts. Each comment belongs to exactly one post
+  and exactly one author. When a post is deleted, all its comments are
+  automatically deleted too (cascade delete). The same happens when a
+  user account is deleted.
+
+  Key fields: id, body, postId, authorId, createdAt
+
+
+  TAGS
+  ─────
+  Stores the set of available tags. Tags are created by administrators.
+  Each tag has a unique name and a unique slug. Tags do not belong to any
+  particular user or post — they are shared across the whole platform.
+
+  Key fields: id, name, slug
+
+
+  TAGS-ON-POSTS (Junction Table)
+  ───────────────────────────────
+  This table represents the many-to-many relationship between posts and tags.
+  A single post can have many tags. A single tag can be applied to many posts.
+  A dedicated junction table with a composite primary key handles this
+  relationship correctly and efficiently.
+
+  Key fields: postId, tagId, createdAt
+
+
+  RELATIONSHIPS AT A GLANCE
+  ──────────────────────────
+
+    Users ──── writes ────► Posts
+    Users ──── writes ────► Comments
+    Posts ──── has ───────► Comments
+    Posts ──── tagged with ◄──────► Tags
+               (via TagsOnPosts)
+
+  Every foreign key relationship is set to cascade on delete, meaning the
+  database automatically cleans up child records when a parent is removed.
+  This keeps the data consistent without requiring manual cleanup in code.
+
+
+  DATABASE PERFORMANCE
+  ─────────────────────
+  Database indexes are defined on all columns that appear frequently in
+  WHERE clauses: email, username, slug, authorId, postId, and status.
+  Without indexes, a query like "find all posts by this author" would scan
+  every row in the posts table. With indexes, it is handled in milliseconds
+  regardless of how many posts exist.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 8 — API OVERVIEW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The API follows REST conventions. Every endpoint uses a standard HTTP method
+that signals the type of operation being performed:
+
+  GET     — Retrieve data (never modifies anything)
+  POST    — Create a new resource
+  PUT     — Update an existing resource
+  DELETE  — Remove a resource
+
+All responses are JSON. Successful responses have a "data" field containing
+the result. Error responses have an "error" field with a human-readable
+message.
+
+  Example success response:
+  {
+    "data": {
+      "id": "clx8k2m3g0000ab12cd34ef56",
+      "title": "Getting Started with Next.js",
+      "slug": "getting-started-with-next-js",
+      "status": "PUBLISHED"
+    },
+    "meta": {
+      "pagination": { "page": 1, "limit": 20, "total": 47, "totalPages": 3 }
+    }
+  }
+
+  Example error response:
+  {
+    "error": "Validation failed",
+    "details": {
+      "fieldErrors": {
+        "title": ["Title is required"],
+        "password": ["Password must contain at least one uppercase letter"]
+      }
+    }
+  }
+
+
+  FULL ROUTE LIST
+  ────────────────
+
+  Authentication
+    POST   /api/auth/register          Register a new account
+    POST   /api/auth/signin            Log in (returns session cookie)
+    POST   /api/auth/signout           Log out (clears session cookie)
+    GET    /api/auth/session           Get the currently logged-in user
+
+  Posts
+    GET    /api/posts                  List published posts (filterable, paginated)
+    POST   /api/posts                  Create a new post (requires login)
+    GET    /api/posts/:id              Get a single post by ID
+    PUT    /api/posts/:id              Update a post (owner or admin only)
+    DELETE /api/posts/:id              Delete a post (owner or admin only)
+
+  Comments
+    GET    /api/posts/:id/comments     List comments on a specific post
+    POST   /api/posts/:id/comments     Add a comment (requires login)
+    PUT    /api/comments/:id           Edit a comment (owner or admin only)
+    DELETE /api/comments/:id           Delete a comment (owner or admin only)
+
+  Users
+    GET    /api/users/:id              Get a user's public profile
+    PUT    /api/users/me               Update your own profile (requires login)
+    PUT    /api/users/me/password      Change your password (requires login)
+
+  Tags
+    GET    /api/tags                   List all tags
+    POST   /api/tags                   Create a tag (admin only)
+    DELETE /api/tags/:id               Delete a tag (admin only)
+
+
+  HTTP STATUS CODES
+  ──────────────────
+  The API uses standard HTTP status codes so any client can understand what
+  happened without reading the response body:
+
+    200 — Success (GET, PUT, DELETE operations completed)
+    201 — Created (a new resource was successfully created)
+    400 — Bad Request (the request was malformed or unparseable)
+    401 — Unauthorized (no valid session — you need to log in)
+    403 — Forbidden (you are logged in but not allowed to do this)
+    404 — Not Found (the resource does not exist or is hidden from you)
+    409 — Conflict (e.g. email address already registered)
+    422 — Unprocessable (input was valid JSON but failed business rules)
+    429 — Too Many Requests (you have been rate limited)
+    500 — Internal Server Error (something unexpected went wrong server-side)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 9 — AUTHENTICATION & AUTHORIZATION SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Authentication and authorization are two distinct concepts that are often
+confused. This section explains both and how they are implemented here.
+
+
+  AUTHENTICATION — "Who Are You?"
+  ────────────────────────────────
+  Authentication is the process of verifying that a user is who they claim
+  to be. In this system it works as follows:
+
+  1. The user sends their email and password to POST /api/auth/signin.
+
+  2. The system looks up the user by email. Even if the email is not found,
+     it still runs the bcrypt comparison on a dummy hash. This ensures the
+     response time is identical whether the email exists or not — preventing
+     attackers from using response timing to discover registered emails.
+
+  3. If the email and password match, Auth.js creates a signed session and
+     sets it as an httpOnly cookie in the browser. This cookie is
+     automatically attached to every subsequent request.
+
+  4. Route handlers read the current session server-side using the auth()
+     function. The session is never read from the request body or query
+     parameters — only from the verified cookie.
+
+  5. The session contains the user's ID, email, username, and role. This
+     information is trusted because it came from the server's own session
+     store, not from the client.
+
+
+  AUTHORIZATION — "Are You Allowed to Do This?"
+  ───────────────────────────────────────────────
+  Authorization happens after authentication. Even if we know who the user
+  is, we still need to check whether they are allowed to perform a specific
+  action. The system enforces two kinds of authorization:
+
+  Role-Based Access Control (RBAC)
+    Certain operations are restricted by role. Only ADMINs can create and
+    delete tags. Only AUTHORs and ADMINs can create posts. Role checks happen
+    server-side on every request — the role is read from the verified session,
+    not from anything the client sends.
+
+  Resource Ownership
+    An AUTHOR can only edit or delete their own posts and comments. When an
+    edit or delete request arrives, the database query includes both the
+    resource ID and the requesting user's ID in the WHERE clause. If no
+    row matches — either because the resource does not exist or because it
+    belongs to someone else — the operation returns zero affected rows and
+    the API returns 404. This is an intentional design choice: returning 404
+    instead of 403 prevents attackers from using the API to discover which
+    resources exist.
+
+
+  TWO-LEVEL PROTECTION
+  ─────────────────────
+  Protection happens at two levels for defence in depth:
+
+  Level 1 — Middleware (app-wide)
+    The root middleware.ts file runs before every API request and rejects
+    any unauthenticated request to a protected route before it even reaches
+    the route handler. This is the first line of defence.
+
+  Level 2 — Route Handlers (per-operation)
+    Individual route handlers perform their own session and ownership checks.
+    This ensures that even if middleware is misconfigured, no sensitive
+    operation proceeds without explicit verification.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 10 — SECURITY DESIGN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Security was not treated as an afterthought — it was designed into the system
+from the beginning. This section describes each security control in place and
+the attack it protects against.
+
+
+  TOKEN STORAGE — prevents XSS token theft
+  ─────────────────────────────────────────
+  Session tokens are stored exclusively in httpOnly cookies. This means
+  they are invisible to JavaScript running in the browser. Even if a
+  cross-site scripting (XSS) attack manages to inject malicious JavaScript
+  into a page, that script cannot read the session token. The Secure flag
+  ensures cookies are only sent over HTTPS. The SameSite=Lax setting
+  provides protection against cross-site request forgery (CSRF).
+
+
+  PASSWORD HASHING — prevents credential exposure
+  ─────────────────────────────────────────────────
+  Passwords are hashed using bcrypt with a cost factor of 12. bcrypt is
+  a slow hashing algorithm by design — each computation takes hundreds of
+  milliseconds. If the database is ever breached and password hashes are
+  stolen, the slowness of bcrypt makes it computationally infeasible for
+  attackers to reverse the hashes back to the original passwords.
+
+
+  INPUT VALIDATION — prevents injection and data corruption
+  ──────────────────────────────────────────────────────────
+  Every piece of external input is validated with Zod before anything else
+  happens. Schemas use .strict() mode, which rejects any fields not
+  explicitly defined — this prevents mass assignment attacks where a client
+  tries to set fields they should not have access to (for example, setting
+  their own role to ADMIN). Field length limits on all string inputs prevent
+  memory exhaustion and oversized payloads.
+
+
+  SQL INJECTION PREVENTION — structural, not procedural
+  ───────────────────────────────────────────────────────
+  Prisma generates parameterised queries for all database operations. User
+  input is never interpolated into SQL strings. This makes SQL injection
+  structurally impossible through normal query paths. The single exception
+  — raw SQL queries using prisma.$queryRaw — requires the use of Prisma's
+  tagged template literal syntax, which also parameterises values.
+
+
+  RATE LIMITING — prevents brute force and abuse
+  ────────────────────────────────────────────────
+  Three tiers of rate limiting are applied:
+
+    Auth endpoints (login, register):
+      5 requests per IP address per 15 minutes.
+      This makes password brute-force attacks impractical.
+
+    Write endpoints (create post, create comment):
+      30 requests per user account per hour.
+      This prevents spam and abuse by authenticated users.
+
+    Read endpoints:
+      100 requests per IP address per minute.
+      This prevents scraping and denial-of-service through read traffic.
+
+  When a limit is exceeded, the API returns 429 Too Many Requests with a
+  Retry-After header indicating when the client may try again.
+
+
+  SECURITY HEADERS — browser-level protection
+  ─────────────────────────────────────────────
+  Every HTTP response includes a set of security headers that instruct the
+  browser on how to handle the response safely:
+
+    Content-Security-Policy
+      Tells the browser which sources are allowed to load scripts, styles,
+      and other resources. Prevents injected scripts from executing even
+      if an XSS vulnerability exists.
+
+    Strict-Transport-Security (HSTS)
+      Forces browsers that have visited before to always use HTTPS, even
+      if the user types "http://". Prevents SSL-stripping attacks.
+
+    X-Frame-Options: DENY
+      Prevents the site from being embedded in an iframe on another domain.
+      Protects against clickjacking attacks.
+
+    X-Content-Type-Options: nosniff
+      Prevents browsers from guessing the content type of a response.
+      Stops certain content-sniffing attacks.
+
+    Referrer-Policy: strict-origin-when-cross-origin
+      Controls what URL information is sent in the Referer header when
+      navigating away from the site. Prevents tokens or IDs in URLs from
+      leaking to third-party services.
+
+
+  ERROR HANDLING — prevents information leakage
+  ───────────────────────────────────────────────
+  All errors are caught at the route handler level. When an unexpected
+  error occurs, the application logs the full error server-side (including
+  stack trace, error message, and context) using Pino, then returns a
+  generic message to the client: "Internal server error". Database error
+  messages, stack traces, and internal paths are never exposed in API
+  responses, as these would give attackers valuable information about the
+  system's internals.
+
+
+  ACCOUNT ENUMERATION PREVENTION
+  ────────────────────────────────
+  The login endpoint always performs the bcrypt hash comparison, even when
+  the provided email address does not exist in the database. Without this,
+  a failed lookup would return faster than a failed password check,
+  allowing attackers to determine which email addresses are registered
+  by measuring response times.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 11 — PROJECT STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The project is organised into clearly named directories. Each directory has
+a single purpose, making the codebase easy to navigate even for someone
+reading it for the first time.
+
+  blog-api/
+  │
+  ├── app/api/              API route handlers — the entry points for all
+  │                         HTTP requests. Thin by design: they validate,
+  │                         delegate, and respond. No business logic here.
+  │
+  ├── lib/                  Shared infrastructure. The Prisma database
+  │                         client, Auth.js configuration, rate limiters,
+  │                         response helpers, and the logger all live here.
+  │                         These are utilities used across the whole app.
+  │
+  ├── modules/              Feature modules, one per domain entity (posts,
+  │                         auth, comments, users, tags). Each module
+  │                         contains its service file (business logic and
+  │                         DB queries), its Zod schema file (validation),
+  │                         and its TypeScript type definitions.
+  │
+  ├── prisma/               The database schema, migration history, and
+  │                         seed script for populating development data.
+  │
+  ├── __tests__/            Unit tests for service functions and schemas.
+  │
+  ├── middleware.ts          Root-level request interceptor. Checks sessions
+  │                         and blocks unauthorized requests before they
+  │                         reach route handlers.
+  │
+  └── next.config.ts        Global Next.js configuration including all
+                            security response headers.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 12 — KEY ENGINEERING DECISIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Several specific decisions were made during the design of this system that
+are worth explaining — particularly for developers who want to understand
+not just what was built, but why.
+
+
+  OWNERSHIP CHECKS IN THE DATABASE QUERY — NOT IN APPLICATION CODE
+  ─────────────────────────────────────────────────────────────────
+  A common mistake in backend development is to fetch a resource from the
+  database, then check in application code whether the requesting user owns
+  it. The correct approach is to include the ownership check in the WHERE
+  clause of the query itself.
+
+  Wrong approach (common but insecure):
+    const post = await db.post.findUnique({ where: { id } })
+    if (post.authorId !== session.user.id) throw new Error('Forbidden')
+
+  Right approach (used in this project):
+    const result = await db.post.updateMany({
+      where: { id, authorId: session.user.id },
+      data: updatedFields
+    })
+
+  The second approach is atomic — it either succeeds or returns zero rows.
+  The first approach is vulnerable to race conditions and is easier to
+  accidentally bypass.
+
+
+  DRAFT POSTS RETURN 404, NOT 403, FOR NON-OWNERS
+  ─────────────────────────────────────────────────
+  When a user requests a post that exists but is not published, the API
+  returns 404 Not Found rather than 403 Forbidden. Returning 403 would
+  tell the requester that the post exists — it would just confirm the
+  resource's existence. By returning 404, the system gives no information
+  about whether a draft exists at that ID.
+
+
+  PRISMA SINGLETON TO PREVENT CONNECTION POOL EXHAUSTION
+  ───────────────────────────────────────────────────────
+  Next.js restarts the module system on every code change in development.
+  Without careful handling, each restart creates a new PrismaClient
+  instance with its own connection pool. After enough restarts, the database
+  runs out of available connections. The project uses a global variable
+  pattern to ensure only one PrismaClient instance ever exists, regardless
+  of how many times the module is reloaded.
+
+
+  STRUCTURED LOGGING INSTEAD OF CONSOLE.LOG
+  ───────────────────────────────────────────
+  console.log produces unstructured text. In a production system, logs need
+  to be machine-readable so they can be searched, filtered, and alerted on.
+  Pino outputs JSON with a consistent structure — every log entry has a
+  timestamp, severity level, and message, plus any additional context
+  provided by the developer. Sensitive fields are automatically redacted.
+
+
+  SEPARATE DIRECT DATABASE URL FOR MIGRATIONS
+  ────────────────────────────────────────────
+  Cloud database platforms like Neon use connection poolers (PgBouncer) to
+  manage many connections efficiently. However, database migrations require
+  a direct, non-pooled connection to the database. The project uses two
+  separate connection string environment variables — DATABASE_URL for
+  normal queries through the pooler, and DIRECT_URL for migrations — to
+  handle this correctly.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 13 — WHAT THIS PROJECT TEACHES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This project was designed to provide hands-on understanding of the following
+backend development concepts:
+
+
+  API DESIGN
+    How to structure REST endpoints logically. How to use HTTP methods and
+    status codes correctly. How to design consistent request and response
+    formats. How to handle pagination, filtering, and search parameters.
+
+
+  AUTHENTICATION
+    How sessions work. Why httpOnly cookies are safer than localStorage.
+    How JWT tokens are signed and verified. How to implement login without
+    leaking information about which accounts exist.
+
+
+  PASSWORD SECURITY
+    Why passwords must be hashed and never stored in plain text. How bcrypt
+    works and why its intentional slowness is a security feature. How to
+    choose an appropriate cost factor.
+
+
+  DATABASE DESIGN
+    How to model relational data with one-to-many and many-to-many
+    relationships. How to write a Prisma schema. How to use database indexes
+    to keep queries fast. How foreign key cascades maintain data consistency.
+
+
+  AUTHORIZATION
+    The difference between authentication and authorization. How to implement
+    role-based access control. How to enforce resource ownership at the
+    database level rather than the application level.
+
+
+  INPUT VALIDATION
+    Why all external input must be validated before use. How to use Zod to
+    define and enforce data schemas. How schema validation prevents mass
+    assignment and injection attacks.
+
+
+  RATE LIMITING
+    Why rate limiting is necessary. How sliding-window rate limiting works.
+    How to apply different limits to different types of endpoints.
+
+
+  ERROR HANDLING
+    How to catch and handle errors consistently across an entire API. Why
+    internal error details must never be sent to clients. How to log errors
+    with enough context to debug them later.
+
+
+  SECURITY HEADERS
+    What HTTP security headers exist and what attacks each one mitigates.
+    How to configure them globally in a Next.js application.
+
+
+  LAYERED ARCHITECTURE
+    Why separating an application into layers (route handler, service,
+    database) improves maintainability and testability. How each layer's
+    responsibilities are kept distinct.
+
+
+  STRUCTURED LOGGING
+    The difference between unstructured logs (console.log) and structured
+    logs (Pino JSON). Why structured logging matters in production systems.
+    How to safely redact sensitive fields from logs.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 14 — HOW TO RUN THE PROJECT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  PREREQUISITES
+  ─────────────
+  - Node.js version 18 or higher
+  - A PostgreSQL database (local installation, Neon, or Supabase)
+  - An Upstash Redis instance (free tier available at upstash.com)
+  - Git
+
+
+  SETUP
+  ──────
+  1. Clone the repository:
+       git clone https://github.com/[your-username]/blog-api.git
+       cd blog-api
+
+  2. Install dependencies:
+       npm install
+
+  3. Create environment file:
+       cp .env.example .env.local
+     Then fill in the values in .env.local (database URL, auth secret,
+     and Upstash credentials).
+
+  4. Generate auth secret:
+       openssl rand -base64 32
+     Paste the output as the value for AUTH_SECRET in .env.local.
+
+  5. Run database migrations:
+       npx prisma migrate dev
+
+  6. Seed the database with test data:
+       npx prisma db seed
+
+  7. Start the development server:
+       npm run dev
+
+  The API will be available at http://localhost:3000/api
+
+
+  AVAILABLE SCRIPTS
+  ──────────────────
+  npm run dev          Start development server with hot reload
+  npm run build        Build for production
+  npm run start        Start production server
+  npm run lint         Run ESLint across all files
+  npm run type-check   Run TypeScript compiler without emitting files
+  npx vitest           Run tests in watch mode
+  npx vitest run       Run tests once (for CI)
+  npx prisma studio    Open visual database browser
+
+
+  TEST CREDENTIALS (after seeding)
+  ──────────────────────────────────
+  Admin account:
+    Email    : admin@example.com
+    Password : Admin123!
+
+  Author account:
+    Email    : author@example.com
+    Password : Author123!
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 15 — FUTURE IMPROVEMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The following features are not included in the current version but represent
+natural next steps for extending the project:
+
+  Email verification
+    After registration, send a confirmation email with a verification link
+    before activating the account. This prevents registration with fake
+    email addresses.
+
+  Password reset via email
+    A "forgot password" flow that sends a time-limited, single-use reset
+    link to the user's registered email address.
+
+  OAuth login
+    Allow users to sign in with Google, GitHub, or other providers using
+    Auth.js's built-in OAuth support, without needing to manage passwords.
+
+  Image uploads
+    Allow users to upload a profile picture and authors to add a cover
+    image to posts. Would integrate with a cloud storage service such as
+    AWS S3 or Cloudflare R2.
+
+  Post bookmarks and likes
+    Social interaction features allowing readers to save posts for later
+    or express appreciation for content.
+
+  Admin dashboard API
+    A set of admin-only endpoints providing platform statistics: total
+    users, posts published per day, most-commented posts, and so on.
+
+  API versioning
+    Introducing versioned routes (/api/v1/...) to allow future breaking
+    changes without disrupting existing clients.
+
+  Full-text search with PostgreSQL
+    Replace simple ILIKE search with PostgreSQL's built-in full-text search
+    using tsvector columns and GIN indexes for significantly better search
+    performance and relevance.
+
+  Webhook support
+    Emit events (post published, new comment) to registered external URLs,
+    allowing other systems to react to activity on the platform.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 16 — GLOSSARY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  API (Application Programming Interface)
+    A set of rules that allows one piece of software to communicate with
+    another. In this context, a set of HTTP endpoints that a client
+    application can send requests to in order to interact with the backend.
+
+  REST (Representational State Transfer)
+    A style of API design that uses standard HTTP methods (GET, POST, PUT,
+    DELETE) and URL structures to represent operations on resources.
+
+  Route Handler
+    In Next.js App Router, a file named route.ts inside the app/api/
+    directory that exports functions named after HTTP methods (GET, POST,
+    etc.) to handle incoming requests to that URL path.
+
+  ORM (Object-Relational Mapper)
+    A library that maps between objects in application code and rows in a
+    relational database, allowing developers to write queries in their
+    programming language instead of SQL.
+
+  JWT (JSON Web Token)
+    A compact, signed token that encodes a set of claims (such as a user's
+    ID and role). The signature allows the recipient to verify the token
+    was issued by a trusted party and has not been tampered with.
+
+  httpOnly Cookie
+    A browser cookie that cannot be accessed by JavaScript. It is sent
+    automatically by the browser with every HTTP request but is invisible
+    to any script running on the page, making it safe for storing session
+    tokens.
+
+  bcrypt
+    A password hashing algorithm designed to be computationally slow,
+    making brute-force attacks against stolen password hashes impractical.
+
+  Rate Limiting
+    A mechanism that restricts how many requests a client can make within
+    a given time window, protecting the API from abuse and brute-force attacks.
+
+  Middleware
+    Code that runs between receiving a request and handling it. In Next.js,
+    middleware runs before every matched request and can inspect, modify,
+    or reject it.
+
+  SQL Injection
+    An attack where malicious SQL code is inserted into an input field in
+    the hope that it will be executed by the database. Prevented here by
+    Prisma's parameterised queries.
+
+  XSS (Cross-Site Scripting)
+    An attack where malicious JavaScript is injected into a web page and
+    executed in a victim's browser. Mitigated here through Content-Security-
+    Policy headers and httpOnly cookies.
+
+  CSRF (Cross-Site Request Forgery)
+    An attack where a malicious website tricks a logged-in user's browser
+    into making a request to your API. Mitigated here by the SameSite
+    cookie attribute and Auth.js's built-in CSRF protection.
+
+  IDOR (Insecure Direct Object Reference)
+    A vulnerability where an API allows access to a resource simply by
+    knowing its ID, without checking whether the requesting user is
+    authorised to access it. Prevented here by ownership checks in
+    database query WHERE clauses.
+
+  Slug
+    A URL-friendly version of a text string. For example, the title
+    "Getting Started with Next.js" becomes the slug
+    "getting-started-with-next-js".
+
+  Connection Pool
+    A cache of database connections maintained so that connections can be
+    reused rather than opened and closed for every query. Important in
+    serverless environments where many short-lived function instances may
+    each try to open their own connection.
+
+  Cascade Delete
+    A database behaviour where deleting a parent record automatically
+    deletes all related child records. For example, deleting a post
+    automatically deletes all its comments.
+
+  Parameterised Query
+    A database query where user-supplied values are passed separately from
+    the query structure, rather than being interpolated into the query
+    string. This prevents SQL injection attacks.
+
+
+================================================================================
+
+  Next.js Blog API — Complete Project Description
+  Version 2.1.0
+
+================================================================================
